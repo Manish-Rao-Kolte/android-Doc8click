@@ -1,0 +1,6 @@
+export const THEME_COLOR = "#02386e"
+export const MAIN_BG_COLOR = "#ffffff"
+export const MAIN_FONT_COLOR = "#000"
+export const BLUE_COLOR1 = "#2B70FD"
+export const BLUE_COLOR2 = "#004ae6"
+export const BLUE_COLOR3 = "#003094"
