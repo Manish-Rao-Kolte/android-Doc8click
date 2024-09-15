@@ -5,8 +5,11 @@ import HomeHeader from '../../components/HomeHeader';
 import Carousel from '../../components/Carousel';
 import SpecialitySection from '../../components/home/SpecialitySection';
 import TopDoctorSection from '../../components/home/TopDoctorSection';
-import { RootScreenProps } from '../../types/navigation';
+import { RootNavParamList, RootScreenProps } from '../../types/navigation';
 import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
+import { MAIN_BG_COLOR } from '../../utils/colors';
+import { authSelector } from '../../redux/reducers/authSlice/authSlice';
+import { useSelector } from 'react-redux';
 
 const carouselData = [
   require('../../images/carousel-image/carousel1.jpg'),
@@ -67,6 +70,7 @@ const doctorSpecialties = [
 
 const Home = ({ navigation }: RootScreenProps<'Home'>) => {
   const scrollViewRef = useRef(null);
+  const user = useSelector(authSelector);
   return (
     <SafeScreen>
       <View style={styles.homeContainer}>
@@ -92,7 +96,7 @@ export default Home;
 const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: MAIN_BG_COLOR,
   },
   homeMainCont: {
     padding: 15,

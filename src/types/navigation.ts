@@ -6,15 +6,16 @@ export type RootNavParamList = {
     Splash: undefined;
     Login: undefined;
     Signup: undefined;
-    BottomTabNavigator: undefined;
     Home: undefined;
     Appointments: undefined;
     Profile: undefined;
+    AuthNavigator: undefined;
+    MyTabsNavigator: undefined;
 };
 
 export type RootScreenProps<T extends keyof RootNavParamList = keyof RootNavParamList> = CompositeScreenProps<
-  StackScreenProps<RootNavParamList, T>,
-  BottomTabScreenProps<RootNavParamList, T>
+    StackScreenProps<RootNavParamList, T>,
+    BottomTabScreenProps<RootNavParamList, T>
 >;
 
 
@@ -28,3 +29,5 @@ export type HeaderProps = {
     title: string;
     navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
 };
+
+  

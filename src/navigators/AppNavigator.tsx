@@ -1,29 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Splash from '../screens/Splash/Splash';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootNavParamList } from '../types/navigation';
-import BottomTabNavigator from './BottomTabNavigator';
-import Login from '../screens/Login/Login';
-import SignUp from '../screens/SignUp/SignUp';
+import AuthNavigator from './AuthNavigator/AuthNavigator';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../redux/reducers/authSlice/authSlice';
+import MyTabsNavigator from './MyTabsNavigator';
 
 const Stack = createStackNavigator<RootNavParamList>();
 
 const AppNavigator = () => {
+  const { userData } = useSelector(authSelector);
+  const [splash, setSplash] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSplash(false);
+    }, 2000);
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Splash"
-        screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Splash" component={Splash} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={SignUp} />
-        <Stack.Screen
-          name="BottomTabNavigator"
-          component={BottomTabNavigator}
-        />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {splash && <Stack.Screen name="Splash" component={Splash} />}
+        {userData ? <Stack.Screen
+          name="MyTabsNavigator"
+          component={MyTabsNavigator}
+        /> : <Stack.Screen name="AuthNavigator" component={AuthNavigator} />}
       </Stack.Navigator>
-    </NavigationContainer>
+    </NavigationContainer >
   );
 };
 

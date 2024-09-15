@@ -5,6 +5,7 @@ import { RootNavParamList, TabBarIconProps } from '../types/navigation';
 import Home from '../screens/Home/Home';
 import MyAppointments from '../screens/MyAppointments/MyAppointments';
 import Profile from '../screens/Profile/Profile';
+// import MovieHome from '../screens/MovieHome/MovieHome';
 
 const Tab = createBottomTabNavigator<RootNavParamList>();
 
@@ -12,6 +13,8 @@ const getTabBarIconImage = (routeName: string) => {
   switch (routeName) {
     case 'Home':
       return require('../images/bottom-tab-icon/home-icon.png');
+    case 'MovieHome':
+      return require('../images/bottom-tab-icon/movie-icon.png');
     case 'Appointments':
       return require('../images/bottom-tab-icon/appointment-icon.png');
     case 'Profile':
@@ -38,7 +41,7 @@ const TabBarIcon = ({ color, route }: TabBarIconProps) => {
   );
 };
 
-const BottomTabNavigator = () => {
+const MyTabsNavigator = () => {
   const screenOptions = ({ route }: { route: TabBarIconProps['route'] }) => ({
     headerShown: false,
     tabBarActiveBackgroundColor: '#fff',
@@ -54,8 +57,8 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={screenOptions}
-      initialRouteName="Home"
       backBehavior="history">
+      {/* <Tab.Screen name="MovieHome" component={MovieHome} /> */}
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Appointments" component={MyAppointments} />
       <Tab.Screen name="Profile" component={Profile} />
@@ -63,7 +66,7 @@ const BottomTabNavigator = () => {
   );
 };
 
-export default BottomTabNavigator;
+export default MyTabsNavigator;
 
 const styles = StyleSheet.create({
   bottomTabContainer: {

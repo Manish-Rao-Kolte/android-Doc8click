@@ -7,30 +7,32 @@ import { BLUE_COLOR1, BLUE_COLOR2, BLUE_COLOR3, MAIN_BG_COLOR, MAIN_FONT_COLOR, 
 import LinerGradientVarient from '../../components/atoms/LinerGradientVarient/LinerGradientVarient'
 import OtpField from '../../components/molecules/OtpField/OtpField'
 import { validateIdentifier, validatePassword } from '../../utils/authValidate'
+import { useDispatch, useSelector } from 'react-redux'
+import { authSelector, login, sendOTP, setUser } from '../../redux/reducers/authSlice/authSlice'
 
 
 const Login = ({ navigation }: RootScreenProps<'Login'>) => {
-    const [identifier, setIdentifier] = useState<number | string>('')
+    const dispatch = useDispatch()
+    const { userData, isLoading, sendingOtp } = useSelector(authSelector)
+    const [identifier, setIdentifier] = useState({ phone: '', email: '' })
     const [password, setPassword] = useState<string>('')
     const [otp, setOtp] = useState<number[]>([])
     const [viewPassword, setViewPassword] = useState<boolean>(false)
     const [loginWithOtp, setLoginWithOtp] = useState<boolean>(false)
     const [otpSent, setOtpSent] = useState<boolean>(false)
-    const [sendingOtp, setSendingOtp] = useState<boolean>(false)
-    const [timer, setTimer] = useState<number>(90)
     const [errText, setErrText] = useState({ identifierErr: '', passwordErr: '', otpErr: '' })
+    const [timer, setTimer] = useState<number>(90)
 
     // function to request otp and mock as api call
     const requestOTP = () => {
-        setSendingOtp(true)
-        const identifierResult = validateIdentifier(identifier, "mobile")
+        const identifierResult = validateIdentifier(Number(identifier.phone), "mobile")
         if (identifierResult === "valid") {
-            setTimeout(() => {
-                setOtpSent(true)
-                setSendingOtp(false)
-            }, 2000);
+            dispatch<any>(sendOTP({ phone: identifier.phone })).then((res: { payload: any }) => {
+                if (res.payload) {
+                    setOtpSent(true)
+                }
+            })
         } else {
-            setSendingOtp(false)
             setErrText({ ...errText, identifierErr: identifierResult })
         }
     }
@@ -39,28 +41,36 @@ const Login = ({ navigation }: RootScreenProps<'Login'>) => {
     const handleOTPLogin = () => {
         if (otp.length === 6) {
             clearFields()
-            navigation.navigate("BottomTabNavigator")
+            dispatch(setUser({ phone: identifier.phone }))
         } else {
             errText.otpErr = "Enter valid OTP"
         }
-
     }
 
     // function to handle login with password
     const handlePasswordLogin = () => {
-        const type = loginWithOtp ? "mobile" : "email"
-        const identifierResult = validateIdentifier(identifier, type)
-        if (identifierResult === "valid") {
-            const passwordResult = validatePassword(password)
-            if (passwordResult === "valid") {
+        // const type = loginWithOtp ? "mobile" : "email"
+        // const identifierResult = validateIdentifier(identifier, type)
+        // if (identifierResult === "valid") {
+        //     const passwordResult = validatePassword(password)
+        //     if (passwordResult === "valid") {
+        //         // dispatch<any>(login({ username: identifier, password })).then((res: { payload: any }) => {
+        //         //     if (res.payload) {
+        //         //         clearFields()
+        //         //     }
+        //         // }
+        //         // )
+        //     } else {
+        //         setErrText({ ...errText, identifierErr: '', passwordErr: passwordResult })
+        //     }
+        // } else {
+        //     setErrText({ ...errText, identifierErr: identifierResult })
+        // }
+        dispatch<any>(login({ username: identifier.email, password })).then((res: { payload: any }) => {
+            if (res.payload) {
                 clearFields()
-                navigation.navigate("BottomTabNavigator")
-            } else {
-                setErrText({ ...errText, identifierErr: '', passwordErr: passwordResult })
             }
-        } else {
-            setErrText({ ...errText, identifierErr: identifierResult })
-        }
+        })
     }
 
     // function to clear all the fields
@@ -69,12 +79,12 @@ const Login = ({ navigation }: RootScreenProps<'Login'>) => {
         setOtp([])
         setLoginWithOtp(false)
         setViewPassword(false)
-        setIdentifier('')
+        setIdentifier({ phone: '', email: '' })
         setPassword('')
-        setTimer(90)
         setErrText({ identifierErr: '', passwordErr: '', otpErr: '' })
     }
 
+    // function to handle the timer for otp
     useLayoutEffect(() => {
         const interval = setInterval(() => {
             setTimer((prev) => {
@@ -105,7 +115,7 @@ const Login = ({ navigation }: RootScreenProps<'Login'>) => {
                 {/* conditonally render the input fields based on the loginWithOtp state */}
                 {loginWithOtp
                     ? <View style={styles.loginInputContainer}>
-                        <TextInputVarient placeholder='Enter Mobile..' value={identifier || ''} icon={require("../../images/input-icon/mobile.png")} onChangeText={txt => setIdentifier(Number(txt))} keyboardType={'numeric'} setFocus={String(identifier).length ? false : true} errText={errText.identifierErr} />
+                        <TextInputVarient placeholder='Enter Mobile..' value={identifier.phone || ''} icon={require("../../images/input-icon/mobile.png")} onChangeText={txt => setIdentifier({ ...identifier, phone: String(txt) })} keyboardType={'numeric'} errText={errText.identifierErr} />
                         {otpSent
                             ?
                             <View>
@@ -116,19 +126,19 @@ const Login = ({ navigation }: RootScreenProps<'Login'>) => {
                             : <LinerGradientVarient gradientColors={[BLUE_COLOR1, BLUE_COLOR2, BLUE_COLOR3]} gradientStyle={[styles.loginBtn, { width: "100%" }]} onPress={requestOTP} text={sendingOtp ? 'Sending OTP..' : 'Get OTP'} />}
                     </View>
                     : <View style={styles.loginInputContainer}>
-                        <TextInputVarient placeholder='Enter Email..' value={identifier} icon={require("../../images/input-icon/email.png")} onChangeText={txt => setIdentifier(txt)} setFocus={String(identifier).length ? false : true} errText={errText.identifierErr} />
+                        <TextInputVarient placeholder='Enter Email..' value={identifier.email} icon={require("../../images/input-icon/email.png")} onChangeText={txt => setIdentifier({ ...identifier, email: txt })} errText={errText.identifierErr} />
                         <TextInputVarient placeholder='Enter Password..' value={password} icon={require("../../images/input-icon/password.png")} onChangeText={txt => setPassword(txt)} viewPassword={viewPassword} setViewPassword={setViewPassword} viewIcon={require("../../images/input-icon/view.png")} hideIcon={require("../../images/input-icon/hide.png")} type='password' errText={errText.passwordErr} />
                     </View>}
                 {/* .. */}
 
                 {/* Render login button only if otp is generated || if user is logging in with password */}
                 {otpSent && <LinerGradientVarient gradientColors={[BLUE_COLOR1, BLUE_COLOR2, BLUE_COLOR3]} gradientStyle={[styles.loginBtn]} onPress={handleOTPLogin} text={'Login'} />}
-                {!loginWithOtp && <LinerGradientVarient gradientColors={[BLUE_COLOR1, BLUE_COLOR2, BLUE_COLOR3]} gradientStyle={[styles.loginBtn]} onPress={handlePasswordLogin} text={'Login'} />}
+                {!loginWithOtp && <LinerGradientVarient gradientColors={[BLUE_COLOR1, BLUE_COLOR2, BLUE_COLOR3]} gradientStyle={[styles.loginBtn]} onPress={handlePasswordLogin} text={'Login'} isLoading={isLoading} />}
                 {/* .. */}
 
                 <View style={{ display: "flex", alignItems: "center" }}>
                     <Text style={{ fontSize: 14, }}>OR</Text>
-                    <Text onPress={() => { loginWithOtp ? clearFields() : setLoginWithOtp(true); setIdentifier('') }} style={{ fontSize: 16, marginTop: 8, color: BLUE_COLOR1 }}>{loginWithOtp ? "Login with Email and Password" : "Login with OTP"}</Text>
+                    <Text onPress={() => { loginWithOtp ? clearFields() : setLoginWithOtp(true); setIdentifier({ phone: '', email: '' }) }} style={{ fontSize: 16, marginTop: 8, color: BLUE_COLOR1 }}>{loginWithOtp ? "Login with Email and Password" : "Login with OTP"}</Text>
                 </View>
             </View>
         </SafeScreen>

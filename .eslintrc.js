@@ -1,6 +1,10 @@
 // module.exports = {
 //   root: true,
 //   extends: '@react-native',
+// "env" : {
+//         "browser" : true,
+//         "es6": true
+//     },
 //   rules: {
 //     // Add custom rules here
 //     'linebreak-style': ['error', 'unix'], // Enforce Unix-style line breaks

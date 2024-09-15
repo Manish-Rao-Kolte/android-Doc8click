@@ -1,10 +1,17 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { HeaderProps } from '../types/navigation';
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../redux/reducers/authSlice/authSlice';
 
 const Header = ({ isHome, title, navigation }: HeaderProps) => {
+  const dispatch = useDispatch();
   const handleBackPress = () => {
     navigation.goBack();
+  };
+
+  const handleLogout = () => {
+    dispatch(removeUser());
   };
   return (
     <View style={styles.headerContainer}>
@@ -17,7 +24,7 @@ const Header = ({ isHome, title, navigation }: HeaderProps) => {
         </TouchableOpacity>
       )}
       <Text style={styles.headerTxt}>{title}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity onPress={handleLogout}>
         <Text style={[styles.headerTxt, { borderColor: "#fff", borderRadius: 10, fontSize: 16, borderWidth: 1, paddingHorizontal: 8, paddingVertical: 2, elevation: 5 }]}>Logout</Text>
       </TouchableOpacity>
     </View>

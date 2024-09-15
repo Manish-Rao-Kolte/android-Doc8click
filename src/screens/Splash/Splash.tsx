@@ -1,15 +1,10 @@
 import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RootScreenProps } from '../../types/navigation';
 import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
 
 
 const Splash = ({ navigation }: RootScreenProps<'Splash'>) => {
-  useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('Login');
-    }, 2000);
-  }, []);
   return (
     <SafeScreen>
       <View style={styles.splashContainer}>
