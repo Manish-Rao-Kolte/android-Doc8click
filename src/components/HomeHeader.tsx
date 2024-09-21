@@ -1,17 +1,21 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../redux/reducers/authSlice/authSlice';
 
 const HomeHeader = () => {
+  const { userData } = useSelector(authSelector);
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.avatarNameCont}>
         <Image
           style={styles.avatarImg}
-          source={require('../images/user-icon.png')}
+          source={userData?.image ? { uri: userData?.image } : require('../images/user-icon.png')}
         />
         <View style={styles.avatarTxtCont}>
           <Text style={styles.avatarTxtGreet}>Good Morning 👋</Text>
-          <Text style={styles.avatarTxtName}>John Doe</Text>
+          <Text style={styles.avatarTxtName}>{userData?.firstName || ""}</Text>
         </View>
       </View>
       <View style={styles.othersCont}>

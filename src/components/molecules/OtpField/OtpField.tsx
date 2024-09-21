@@ -2,10 +2,11 @@ import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 
 interface OtpFieldProps {
-    setOtp: (otp: number[]) => void;
+    setLoginForm: (form: any) => void;
+    loginForm: any;
 }
 
-const OtpField = ({ setOtp }: OtpFieldProps) => {
+const OtpField = ({ setLoginForm, loginForm }: OtpFieldProps) => {
     const otpRef = useRef<TextInput[]>([])
     const [localOtp, setLocalOtp] = useState<number[]>([])
 
@@ -17,7 +18,7 @@ const OtpField = ({ setOtp }: OtpFieldProps) => {
                 newOtp[index] = value;
                 setLocalOtp([...newOtp])
                 otpRef.current[index + 1]?.focus();
-                setOtp([...newOtp])
+                setLoginForm({ ...loginForm, otp: newOtp.join('') })
                 return;
             }
             if (newOtp[index]) {

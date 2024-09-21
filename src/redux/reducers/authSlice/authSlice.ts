@@ -1,36 +1,62 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { user } from "../../../types/schemas/user/user";
-import { API } from "../../../services/apiCall/apiCall";
-import { set } from "zod";
+import { updateUser } from "../userSlice/userSlice";
+import axios from "axios";
+import { API_BASE_URL, ENV, API_DEV_BASE_URL } from "@env";
 
 const initialState = {
     isLoading: false,
-    isError: false,
+    isError: '' as string | undefined,
     userData: null as user | null,
     sendingOtp: false,
     otpSent : false 
 };
 
-export type loginPayload = {
-    username: string,
-    password: string
-}
-
 export const login = createAsyncThunk(
     'auth/login',
-    async (payload: loginPayload) => {
-        try {
-            const response = await API.post('auth/login', payload);
+    async (payload: user, {rejectWithValue}) => {       
+        try {           
+            let response;
+            if(ENV === "production") {
+                response = await axios.post(`${API_BASE_URL}/auth/login`, payload, { headers: { 'Content-Type': 'application/json' } });
+            } else {
+                response = await axios.post(`${API_DEV_BASE_URL}/auth/login`, payload, { headers: { 'Content-Type': 'application/json' } });
+            }
             return response.data;
         } catch (error) {
-            throw error;
+            if (axios.isAxiosError(error) && error.response && error.response.data) {               
+                return rejectWithValue(error.response.data.msg);
+            } else {
+                return rejectWithValue('An unexpected error occurred'); 
+            }
+        }
+    }
+);
+
+export const signup = createAsyncThunk(
+    'auth/signup',
+    async (payload: user, {rejectWithValue}) => {
+        try {
+            let response;
+            if(ENV === "production") {
+                response = await axios.post(`${API_BASE_URL}/auth/signup`, payload, { headers: { 'Content-Type': 'application/json' } });
+            } else {
+                response = await axios.post(`${API_DEV_BASE_URL}/auth/signup`, payload, { headers: { 'Content-Type': 'application/json' } });
+            }          
+            return response.data;
+        } catch (error) {        
+            if (axios.isAxiosError(error) && error.response && error.response.data) {               
+                return rejectWithValue(error.response.data.msg);
+            } else {
+                return rejectWithValue('An unexpected error occurred'); 
+            }
         }
     }
 );
 
 export const sendOTP = createAsyncThunk(
     'auth/sendOTP',
-    async (payload: { phone: string }) => {
+    async (payload: { phoneNumber: string }) => {
         try {
             return true;
         } catch (error) {
@@ -48,39 +74,49 @@ const authSlice = createSlice({
         },
         removeUser: (state) => {            
             state.userData = null;
+        },
+        resetError: (state) => {
+            state.isError = '';
         }
     },
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
             state.isLoading = true;
-            state.isError = false;
+            state.isError = '';
         }).addCase(login.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.isError = false;
+            state.isError = '';
             state.userData = action.payload;
-        }).addCase(login.rejected, (state) => {
+        }).addCase(login.rejected, (state, action) => {          
             state.isLoading = false;
-            state.isError = true;
+            state.isError = action.payload as string;
+        }).addCase(signup.pending, (state) => {
+            state.isLoading = true;
+            state.isError = '';
+        }).addCase(signup.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = '';
+            state.userData = action.payload;
+        }).addCase(signup.rejected, (state, action) => {
+            state.isLoading = false;            
+            state.isError = action.payload as string;
         }).addCase(sendOTP.pending, (state) => {
             state.sendingOtp = true;
-            state.isError = false;
+            state.isError = '';
         }).addCase(sendOTP.fulfilled, (state) => {
             state.sendingOtp = false;
-            state.isError = false;
+            state.isError = '';
             state.otpSent = true;
-        }).addCase(sendOTP.rejected, (state) => {
+        }).addCase(sendOTP.rejected, (state, action) => {
             state.sendingOtp = false;
-            state.isError = true;
+            state.isError = action.payload as string;
+        }).addCase(updateUser.fulfilled, (state, action) => {
+            state.userData = action.payload;
         });
     }
 });
 
-type t = {
-    emilys: string,
-    emilyspass: string
-}
 
-
-export const { setUser, removeUser } = authSlice.actions;
+export const { setUser, removeUser, resetError } = authSlice.actions;
 export const authReducer =  authSlice.reducer;
 export const authSelector = (state: any) => state.auth;

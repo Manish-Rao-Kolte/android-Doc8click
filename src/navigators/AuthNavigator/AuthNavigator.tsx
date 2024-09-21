@@ -8,7 +8,7 @@ const Stack = createStackNavigator<RootNavParamList>();
 
 const AuthNavigator = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Login'>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Signup" component={SignUp} />
         </Stack.Navigator>
