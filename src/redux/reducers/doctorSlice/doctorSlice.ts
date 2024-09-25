@@ -14,14 +14,16 @@ export const getDoctors = createAsyncThunk(
   'doctor/getDoctors',
   async (payload: {specialty: string}, {rejectWithValue}) => {
     try {
-      let response;
-      if (ENV === 'production') {
-        response = await axios.get(`${API_BASE_URL}/doctor`, {params: payload});
-      } else {
-        response = await axios.get(`${API_DEV_BASE_URL}/doctor`, {
-          params: payload,
-        });
-      }
+      let response = await axios.get(`${API_BASE_URL}/doctor`, {
+        params: payload,
+      });
+      // if (ENV === 'production') {
+      //   response = await axios.get(`${API_BASE_URL}/doctor`, {params: payload});
+      // } else {
+      //   response = await axios.get(`${API_DEV_BASE_URL}/doctor`, {
+      //     params: payload,
+      //   });
+      // }
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response && error.response.data) {

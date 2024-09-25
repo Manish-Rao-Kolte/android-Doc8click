@@ -9,7 +9,7 @@ import {authSelector} from '../redux/reducers/authSlice/authSlice';
 import MyTabsNavigator from './MyTabsNavigator';
 import BookAppointment from '../screens/BookAppointment/BookAppointment';
 import {THEME_COLOR} from '../utils/colors';
-import SpecialtyDoctors from '../screens/specialtyDoctors/specialtyDoctors';
+import SpecialtyDoctors from '../screens/SpecialtyDoctors/SpecialtyDoctors';
 
 const Stack = createStackNavigator<RootNavParamList>();
 

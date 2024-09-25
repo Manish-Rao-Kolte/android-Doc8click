@@ -8,8 +8,8 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import DatePicker from 'react-native-datepicker';
-import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
+import DateTimePicker from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
 import {
   BLUE_COLOR1,
   BLUE_COLOR3,
@@ -35,7 +35,7 @@ const timeSlots = [
 
 const BookAppointment = ({route}: {route: any}) => {
   const {doctor} = route.params;
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState(timeSlots[0]);
 
   const handleBookNow = () => {
@@ -87,14 +87,10 @@ const BookAppointment = ({route}: {route: any}) => {
       {/* Date Picker */}
       <View style={styles.datePicker}>
         <Text style={styles.sectionTitle}>Select Date</Text>
-        <DatePicker
-          style={styles.datePickerInput}
+        <DateTimePicker
+          mode="single"
           date={selectedDate}
-          mode="date"
-          placeholder="Select date"
-          format="YYYY-MM-DD"
-          minDate={new Date()}
-          disabled={true}
+          onChange={params => setSelectedDate(params.date as dayjs.Dayjs)}
         />
       </View>
 
@@ -189,7 +185,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   datePicker: {
-    marginBottom: 20,
+    marginBottom: 6,
   },
   sectionTitle: {
     fontSize: 18,
@@ -224,6 +220,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginBottom: 10,
   },
   bookButtonText: {
     color: '#fff',

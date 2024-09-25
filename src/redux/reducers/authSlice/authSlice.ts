@@ -16,16 +16,18 @@ export const login = createAsyncThunk(
   'auth/login',
   async (payload: user, {rejectWithValue}) => {
     try {
-      let response;
-      if (ENV === 'production') {
-        response = await axios.post(`${API_BASE_URL}/auth/login`, payload, {
-          headers: {'Content-Type': 'application/json'},
-        });
-      } else {
-        response = await axios.post(`${API_DEV_BASE_URL}/auth/login`, payload, {
-          headers: {'Content-Type': 'application/json'},
-        });
-      }
+      let response = await axios.post(`${API_BASE_URL}/auth/login`, payload, {
+        headers: {'Content-Type': 'application/json'},
+      });
+      // if (ENV === 'production') {
+      //   response = await axios.post(`${API_BASE_URL}/auth/login`, payload, {
+      //     headers: {'Content-Type': 'application/json'},
+      //   });
+      // } else {
+      //   response = await axios.post(`${API_DEV_BASE_URL}/auth/login`, payload, {
+      //     headers: {'Content-Type': 'application/json'},
+      //   });
+      // }
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response && error.response.data) {
@@ -41,18 +43,20 @@ export const signup = createAsyncThunk(
   'auth/signup',
   async (payload: user, {rejectWithValue}) => {
     try {
-      let response;
-      if (ENV === 'production') {
-        response = await axios.post(`${API_BASE_URL}/auth/signup`, payload, {
-          headers: {'Content-Type': 'application/json'},
-        });
-      } else {
-        response = await axios.post(
-          `${API_DEV_BASE_URL}/auth/signup`,
-          payload,
-          {headers: {'Content-Type': 'application/json'}},
-        );
-      }
+      let response = await axios.post(`${API_BASE_URL}/auth/signup`, payload, {
+        headers: {'Content-Type': 'application/json'},
+      });
+      // if (ENV === 'production') {
+      //   response = await axios.post(`${API_BASE_URL}/auth/signup`, payload, {
+      //     headers: {'Content-Type': 'application/json'},
+      //   });
+      // } else {
+      //   response = await axios.post(
+      //     `${API_DEV_BASE_URL}/auth/signup`,
+      //     payload,
+      //     {headers: {'Content-Type': 'application/json'}},
+      //   );
+      // }
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response && error.response.data) {

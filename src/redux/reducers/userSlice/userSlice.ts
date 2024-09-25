@@ -19,20 +19,24 @@ export const updateUser = createAsyncThunk(
     try {
       const token = `Bearer ${payload.user?.token}`;
       axios.defaults.headers.common['Authorization'] = token;
-      let response;
-      if (ENV === 'production') {
-        response = await axios.put(
-          `${API_BASE_URL}/user/update`,
-          payload.data,
-          {headers: {'Content-Type': 'multipart/form-data'}},
-        );
-      } else {
-        response = await axios.put(
-          `${API_DEV_BASE_URL}/user/update`,
-          payload.data,
-          {headers: {'Content-Type': 'multipart/form-data'}},
-        );
-      }
+      let response = await axios.put(
+        `${API_BASE_URL}/user/update`,
+        payload.data,
+        {headers: {'Content-Type': 'multipart/form-data'}},
+      );
+      // if (ENV === 'production') {
+      //   response = await axios.put(
+      //     `${API_BASE_URL}/user/update`,
+      //     payload.data,
+      //     {headers: {'Content-Type': 'multipart/form-data'}},
+      //   );
+      // } else {
+      //   response = await axios.put(
+      //     `${API_DEV_BASE_URL}/user/update`,
+      //     payload.data,
+      //     {headers: {'Content-Type': 'multipart/form-data'}},
+      //   );
+      // }
       return response.data;
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response && error.response.data) {
