@@ -1,13 +1,13 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
-import React, { useRef } from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import React, {useRef} from 'react';
 import Header from '../../components/Header';
 import HomeHeader from '../../components/HomeHeader';
 import Carousel from '../../components/Carousel';
 import SpecialitySection from '../../components/home/SpecialitySection';
 import TopDoctorSection from '../../components/home/TopDoctorSection';
-import { RootScreenProps } from '../../types/navigation';
+import {RootScreenProps} from '../../types/navigation';
 import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
-import { MAIN_BG_COLOR } from '../../utils/colors';
+import {MAIN_BG_COLOR} from '../../utils/colors';
 
 const carouselData = [
   require('../../images/carousel-image/carousel1.jpg'),
@@ -16,7 +16,7 @@ const carouselData = [
 ];
 const doctorSpecialties = [
   {
-    specialty: 'Genral',
+    specialty: 'General',
     image: require('../../images/speciality-icon/genral-icon.png'),
   },
   {
@@ -65,9 +65,9 @@ const doctorSpecialties = [
   },
 ];
 
-
-const Home = ({ navigation }: RootScreenProps<'Home'>) => {
+const Home = ({navigation}: RootScreenProps<'Home'>) => {
   const scrollViewRef = useRef(null);
+
   return (
     <SafeScreen>
       <View style={styles.homeContainer}>
@@ -76,10 +76,14 @@ const Home = ({ navigation }: RootScreenProps<'Home'>) => {
           <HomeHeader />
           <Carousel data={carouselData} />
           <View style={styles.homeMainCont}>
-            <SpecialitySection doctorSpecialties={doctorSpecialties} />
+            <SpecialitySection
+              doctorSpecialties={doctorSpecialties}
+              navigation={navigation}
+            />
             <TopDoctorSection
               doctorSpecialties={doctorSpecialties}
               scrollViewRef={scrollViewRef}
+              navigation={navigation}
             />
           </View>
         </ScrollView>

@@ -1,19 +1,24 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
+import {RootNavParamList, RootScreenProps} from '../types/navigation';
+import {BLUE_COLOR1} from '../utils/colors';
+import {doctor} from '../types/schemas/doctor/doctor';
 
 type DocCardProps = {
-  doc: {
-    name: string;
-    specialty: string;
-    rating: number;
-    image: any;
-  };
+  doc: doctor;
+  navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
 };
 
-const DocCard = ({ doc }: DocCardProps) => {
+const DocCard = ({doc, navigation}: DocCardProps) => {
+  const navigateToBookAppointment = () => {
+    navigation.navigate('BookAppointment', {doctor: doc});
+  };
   return (
     <View style={styles.docCardContainer}>
-      <Image style={styles.docCardImg} source={doc.image} />
+      <Image
+        style={styles.docCardImg}
+        source={require('../images/doctors-image/doctor1-icon.png')}
+      />
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.docCardName}>
         {doc.name}
       </Text>
@@ -24,18 +29,9 @@ const DocCard = ({ doc }: DocCardProps) => {
         Rating: {doc.rating}
       </Text>
       <TouchableOpacity
-        style={{
-          borderWidth: 2,
-          borderColor: '#246BFD',
-          borderRadius: 10,
-          backgroundColor: '#246BFD',
-          width: '90%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          elevation: 5,
-          padding: 5,
-        }}>
-        <Text style={{ color: '#fff', fontSize: 20 }}>Book</Text>
+        style={styles.docCardBookBtn}
+        onPress={navigateToBookAppointment}>
+        <Text style={{color: '#fff', fontSize: 20}}>Book</Text>
       </TouchableOpacity>
     </View>
   );
@@ -49,7 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
-    borderColor: '#246BFD',
+    borderColor: BLUE_COLOR1,
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 5,
@@ -72,5 +68,16 @@ const styles = StyleSheet.create({
   docCardRat: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  docCardBookBtn: {
+    borderWidth: 2,
+    borderColor: BLUE_COLOR1,
+    borderRadius: 10,
+    backgroundColor: BLUE_COLOR1,
+    width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    padding: 5,
   },
 });

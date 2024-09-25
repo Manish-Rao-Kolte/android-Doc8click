@@ -1,11 +1,12 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { RootNavParamList, TabBarIconProps } from '../types/navigation';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {RootNavParamList, TabBarIconProps} from '../types/navigation';
 import Home from '../screens/Home/Home';
 import MyAppointments from '../screens/MyAppointments/MyAppointments';
 import Profile from '../screens/Profile/Profile';
-// import MovieHome from '../screens/MovieHome/MovieHome';
+import PdfViewer from '../screens/PdfViewer/PdfViewer';
+import MovieHome from '../screens/MovieHome/MovieHome';
 
 const Tab = createBottomTabNavigator<RootNavParamList>();
 
@@ -19,22 +20,24 @@ const getTabBarIconImage = (routeName: string) => {
       return require('../images/bottom-tab-icon/appointment-icon.png');
     case 'Profile':
       return require('../images/bottom-tab-icon/profile-icon.png');
+    case 'PdfViever':
+      return require('../images/bottom-tab-icon/profile-icon.png');
     default:
       return '';
   }
 };
 
-const TabBarIcon = ({ color, route }: TabBarIconProps) => {
+const TabBarIcon = ({color, route}: TabBarIconProps) => {
   return (
     <View style={styles.bottomTabContainer}>
       <Image
         source={getTabBarIconImage(route.name)}
-        style={[styles.bottomTabImage, { tintColor: color }]}
+        style={[styles.bottomTabImage, {tintColor: color}]}
       />
       <Text
         numberOfLines={1}
         ellipsizeMode="tail"
-        style={[styles.bottomTabTitle, { color: color }]}>
+        style={[styles.bottomTabTitle, {color: color}]}>
         {route.name}
       </Text>
     </View>
@@ -42,7 +45,7 @@ const TabBarIcon = ({ color, route }: TabBarIconProps) => {
 };
 
 const MyTabsNavigator = () => {
-  const screenOptions = ({ route }: { route: TabBarIconProps['route'] }) => ({
+  const screenOptions = ({route}: {route: TabBarIconProps['route']}) => ({
     headerShown: false,
     tabBarActiveBackgroundColor: '#fff',
     tabBarInactiveBackgroundColor: '#fff',
@@ -51,17 +54,18 @@ const MyTabsNavigator = () => {
     tabBarLabel: () => {
       return null;
     },
-    tabBarIcon: (props: { focused: boolean; color: string; size: number }) => <TabBarIcon {...props} route={route} />,
+    tabBarIcon: (props: {focused: boolean; color: string; size: number}) => (
+      <TabBarIcon {...props} route={route} />
+    ),
   });
 
   return (
-    <Tab.Navigator
-      screenOptions={screenOptions}
-      backBehavior="history">
-      {/* <Tab.Screen name="MovieHome" component={MovieHome} /> */}
+    <Tab.Navigator screenOptions={screenOptions} backBehavior="history">
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Appointments" component={MyAppointments} />
       <Tab.Screen name="Profile" component={Profile} />
+      {/* <Tab.Screen name="MovieHome" component={MovieHome} /> */}
+      {/* <Tab.Screen name="PdfViever" component={PdfViewer} /> */}
     </Tab.Navigator>
   );
 };

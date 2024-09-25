@@ -1,10 +1,9 @@
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
+import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { RootScreenProps } from '../../types/navigation';
+import {RootScreenProps} from '../../types/navigation';
 import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
 
-
-const Splash = ({ navigation }: RootScreenProps<'Splash'>) => {
+const Splash = ({navigation}: RootScreenProps<'Splash'>) => {
   return (
     <SafeScreen>
       <View style={styles.splashContainer}>
@@ -16,9 +15,9 @@ const Splash = ({ navigation }: RootScreenProps<'Splash'>) => {
         <View style={styles.splashTxtCont}>
           <Text style={styles.splashTxt}>Welcome to Doc@Click 👋</Text>
           <Text style={styles.splashSubTxt}>
-            Your personalized healthcare companion. Designed to make managing your
-            health effortless, our app allows you to schedule doctor appointments
-            with just a few taps.
+            Your personalized healthcare companion. Designed to make managing
+            your health effortless, our app allows you to schedule doctor
+            appointments with just a few taps.
           </Text>
         </View>
       </View>

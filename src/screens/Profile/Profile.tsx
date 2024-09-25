@@ -1,13 +1,17 @@
-import { StyleSheet, View, Image, Pressable, Text } from 'react-native';
-import React, { useState } from 'react';
+import {StyleSheet, View, Image, Pressable, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Header from '../../components/Header';
-import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {
+  Asset,
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 import Modal from '../../components/Modal';
-import { RootScreenProps } from '../../types/navigation';
+import {RootScreenProps} from '../../types/navigation';
 import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../../redux/reducers/userSlice/userSlice';
-import { authSelector } from '../../redux/reducers/authSlice/authSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateUser} from '../../redux/reducers/userSlice/userSlice';
+import {authSelector} from '../../redux/reducers/authSlice/authSlice';
 import GenderSelect from '../../components/molecules/GenderSelect/GenderSelect';
 import TextInputVarient from '../../components/atoms/TextInputVarient/TextInputVarient';
 
@@ -19,14 +23,20 @@ const imagePickerOptions = {
   quality: 1 as const,
 };
 
-const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
+const Profile = ({navigation}: RootScreenProps<'Profile'>) => {
   const dispatch = useDispatch();
-  const { userData } = useSelector(authSelector);
+  const {userData} = useSelector(authSelector);
   const [modalVisible, setModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(`${ userData?.firstName || '' } ${ userData?.lastName || '' }`);
+  const [name, setName] = useState(
+    `${userData?.firstName || ''} ${userData?.lastName || ''}`,
+  );
   const [address, setAddress] = useState(userData?.address || '');
   const [gender, setGender] = useState(userData?.gender || '');
+
+  // useEffect(() => {
+  //   console.log(userData);
+  // }, []);
 
   const handleCamera = () => {
     launchCamera(imagePickerOptions, response => {
@@ -57,11 +67,11 @@ const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
       type: asset.type,
       name: asset.fileName,
     });
-    dispatch<any>(updateUser({ user: userData, data: formData }));
+    dispatch<any>(updateUser({user: userData, data: formData}));
   };
 
   const handleCancel = () => {
-    setName(`${ userData?.firstName || '' } ${ userData?.lastName || '' }`);
+    setName(`${userData?.firstName || ''} ${userData?.lastName || ''}`);
     setAddress(userData?.address || '');
     setGender(userData?.gender || '');
     setIsEditing(false);
@@ -73,14 +83,16 @@ const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
     formData.append('lastName', name.split(' ')[1]);
     formData.append('gender', gender);
     formData.append('address', address);
-    dispatch<any>(updateUser({ user: userData, data: formData })).then((res: any) => {
-      if (res.payload) {
-        if (!res.error) {
-          setIsEditing(false);
+    dispatch<any>(updateUser({user: userData, data: formData})).then(
+      (res: any) => {
+        if (res.payload) {
+          if (!res.error) {
+            setIsEditing(false);
+          }
         }
-      }
-    });
-  }
+      },
+    );
+  };
 
   return (
     <SafeScreen>
@@ -91,12 +103,15 @@ const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
           <View style={styles.profileImgCont}>
             <Image
               style={styles.profileImg}
-              source={!userData?.image ? require("../../images/user-icon.png") : { uri: userData?.image }}
+              source={
+                !userData?.image
+                  ? require('../../images/user-icon.png')
+                  : {uri: userData?.image}
+              }
             />
             <Pressable
               style={styles.profileEditIconCont}
-              onPress={() => setModalVisible(true)}
-            >
+              onPress={() => setModalVisible(true)}>
               <Image
                 style={styles.profileEditIcon}
                 source={require('../../images/edit-icon.png')}
@@ -106,11 +121,23 @@ const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
 
           {/* User Information Section */}
           {isEditing ? (
-            <View style={{ display: 'flex', width: "100%", alignItems: 'center', gap: 20 }} >
-              <TextInputVarient value={name
-
-              } onChangeText={setName} placeholder='Name' />
-              <TextInputVarient value={address} onChangeText={setAddress} placeholder='Address' />
+            <View
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                gap: 20,
+              }}>
+              <TextInputVarient
+                value={name}
+                onChangeText={setName}
+                placeholder="Name"
+              />
+              <TextInputVarient
+                value={address}
+                onChangeText={setAddress}
+                placeholder="Address"
+              />
               <GenderSelect
                 selectedGender={gender || userData?.gender}
                 onGenderSelect={(val: string) => setGender(val)}
@@ -127,7 +154,9 @@ const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
           ) : (
             <View style={styles.userInfoCard}>
               <Text style={styles.profileLabel}>Full Name:</Text>
-              <Text style={styles.profileText}>{`${ userData?.firstName || '' } ${ userData?.lastName || '' }`}</Text>
+              <Text style={styles.profileText}>{`${userData?.firstName || ''} ${
+                userData?.lastName || ''
+              }`}</Text>
               <Text style={styles.profileLabel}>Username:</Text>
               <Text style={styles.profileText}>{userData?.username}</Text>
               <Text style={styles.profileLabel}>Email:</Text>
@@ -136,7 +165,9 @@ const Profile = ({ navigation }: RootScreenProps<'Profile'>) => {
               <Text style={styles.profileText}>{userData?.address}</Text>
               <Text style={styles.profileLabel}>Gender:</Text>
               <Text style={styles.profileText}>{userData?.gender}</Text>
-              <Pressable style={styles.editButton} onPress={() => setIsEditing(true)}>
+              <Pressable
+                style={styles.editButton}
+                onPress={() => setIsEditing(true)}>
                 <Text style={styles.editButtonText}>Edit Profile</Text>
               </Pressable>
             </View>
@@ -174,7 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 65,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 10,
@@ -208,7 +239,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 4,
@@ -236,7 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
@@ -248,7 +279,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(68,182,120)',
     borderRadius: 25,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
@@ -269,7 +300,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginRight: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
@@ -285,7 +316,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 25,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,

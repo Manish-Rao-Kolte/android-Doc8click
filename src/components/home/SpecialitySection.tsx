@@ -1,18 +1,31 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import {RootNavParamList, RootScreenProps} from '../../types/navigation';
+import {useDispatch} from 'react-redux';
+import {setSpecialty} from '../../redux/reducers/doctorSlice/doctorSlice';
 
 interface SpecialitySectionProps {
-  doctorSpecialties: { specialty: string; image: any }[];
+  doctorSpecialties: {specialty: string; image: any}[];
+  navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
 }
 
-const SpecialitySection: React.FC<SpecialitySectionProps> = ({ doctorSpecialties }) => {
+const SpecialitySection: React.FC<SpecialitySectionProps> = ({
+  doctorSpecialties,
+  navigation,
+}) => {
+  const dispatch = useDispatch();
+
+  const handleSpecialtyPress = (specialty: string) => {
+    dispatch(setSpecialty(specialty));
+    navigation.navigate('SpecialtyDoctors', {specialty});
+  };
   return (
     <View style={styles.specialitySec}>
       <View style={styles.specialitySecHdr}>
         <Text style={styles.specialitySecHdrTxt}>Doctor Speciality</Text>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={styles.specialitySecHdrLink}>See All</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={styles.specialitySecContent}>
         {doctorSpecialties.map((item, index) => {
@@ -36,7 +49,9 @@ const SpecialitySection: React.FC<SpecialitySectionProps> = ({ doctorSpecialties
           } else if (index < 7) {
             return (
               <View style={styles.specialitySecItem} key={index}>
-                <TouchableOpacity style={styles.specialitySecItemImgCont}>
+                <TouchableOpacity
+                  style={styles.specialitySecItemImgCont}
+                  onPress={() => handleSpecialtyPress(item.specialty)}>
                   <Image
                     style={styles.specialitySecItemImg}
                     source={item.image}

@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
         backgroundColor: MAIN_BG_COLOR,
     },
     loginImg: {
-        width: 100,
-        height: 100,
+        width: 150,
+        height: 150,
     },
     loginHeader: {
         fontSize: 28,

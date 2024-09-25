@@ -1,30 +1,38 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, { useCallback, useRef, useState } from 'react';
-import { FlatList } from 'react-native-gesture-handler';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useLayoutEffect, useRef, useState} from 'react';
+import {FlatList} from 'react-native-gesture-handler';
 import DocCard from '../DocCard';
-import { doctorsData } from '../../../data';
+import {BLUE_COLOR1, MAIN_BG_COLOR, MAIN_FONT_COLOR} from '../../utils/colors';
+import {
+  doctorSelector,
+  getDoctors,
+  setSpecialty,
+} from '../../redux/reducers/doctorSlice/doctorSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {doctor} from '../../types/schemas/doctor/doctor';
+import {RootNavParamList, RootScreenProps} from '../../types/navigation';
 
 interface TopDoctorSectionProps {
-  doctorSpecialties: { specialty: string }[];
+  doctorSpecialties: {specialty: string}[];
   scrollViewRef: React.RefObject<any>;
+  navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
 }
 
-const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({ doctorSpecialties, scrollViewRef }) => {
+const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({
+  doctorSpecialties,
+  scrollViewRef,
+  navigation,
+}) => {
   const docSecRef = useRef<View>(null);
   const flatListRef = useRef<FlatList>(null);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(
-    doctorSpecialties[0]?.specialty || '',
-  );
+  const {specialty, doctors} = useSelector(doctorSelector);
+  const dispatch = useDispatch();
+  const doctorsList = doctors;
 
   const handleScrollToIndex = (index: number) => {
     const getViewPos = () => {
       const lastIndex = doctorSpecialties.findIndex(
-        (item: { specialty: string; }) => item.specialty === selectedSpecialty,
+        (item: {specialty: string}) => item.specialty === specialty,
       );
       if (lastIndex <= index) return 0;
       return 1;
@@ -40,16 +48,16 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({ doctorSpecialties, 
 
   const handleItemPress = (index: number) => {
     handleScrollToIndex(index);
-    setSelectedSpecialty(doctorSpecialties[index]?.specialty || '');
+    dispatch(setSpecialty(String(doctorSpecialties[index].specialty)));
   };
 
-  const handleScroll = useCallback(() => {
+  const handleScrollToSection = useCallback(() => {
     if (scrollViewRef.current && docSecRef.current) {
       docSecRef.current.measureLayout(
         scrollViewRef.current,
         (left: number, top: number, width: number, height: number) => {
           scrollViewRef.current.scrollTo({
-            y: top + height / 2,
+            y: top - 110,
             animated: true,
           });
         },
@@ -57,22 +65,28 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({ doctorSpecialties, 
     }
   }, []);
 
+  useLayoutEffect(() => {
+    if (specialty) {
+      dispatch<any>(getDoctors({specialty}));
+    }
+  }, [specialty]);
+
   return (
     <View style={styles.topDocSec}>
       <View style={styles.topDocSecHdr}>
-        <Text style={styles.topDocSecHdrTxt} onPress={handleScroll}>
+        <Text style={styles.topDocSecHdrTxt} onPress={handleScrollToSection}>
           Top Doctors
         </Text>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={styles.topDocSecHdrLink}>See All</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <FlatList
         ref={flatListRef}
         horizontal
         data={doctorSpecialties}
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index }) => (
+        renderItem={({item, index}) => (
           <TouchableOpacity onPress={() => handleItemPress(index)}>
             <Text
               key={item.specialty}
@@ -80,9 +94,9 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({ doctorSpecialties, 
               ellipsizeMode="tail"
               style={[
                 styles.topDocSplListTxt,
-                item.specialty === selectedSpecialty && {
-                  backgroundColor: '#246BFD',
-                  color: '#fff',
+                item.specialty === specialty && {
+                  backgroundColor: BLUE_COLOR1,
+                  color: MAIN_BG_COLOR,
                 },
               ]}>
               {item.specialty}
@@ -91,12 +105,10 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({ doctorSpecialties, 
         )}
       />
       <View style={styles.topDocSecContent} ref={docSecRef}>
-        {doctorsData.map((item, index) => {
-          if (index < 6) {
-            return <DocCard key={index} doc={item} />;
-          }
-          return null;
-        })}
+        {doctorsList?.length > 0 &&
+          doctorsList
+            .slice(0, 6)
+            .map((doc: doctor) => <DocCard key={doc._id} doc={doc} navigation={navigation}/>)}
       </View>
     </View>
   );
@@ -118,26 +130,26 @@ const styles = StyleSheet.create({
   topDocSecHdrTxt: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#2B2A2A',
+    color: MAIN_FONT_COLOR,
   },
   topDocSecHdrLink: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#2B70FD',
+    color: BLUE_COLOR1,
   },
   topDocSplListTxt: {
-    fontSize: 19,
+    fontSize: 16,
+    maxWidth: 120,
     height: 35,
-    maxWidth: 150,
-    marginHorizontal: 3,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    marginHorizontal: 1,
+    paddingHorizontal: 6,
     borderWidth: 2,
-    borderColor: '#246BFD',
+    borderColor: BLUE_COLOR1,
     borderRadius: 20,
     fontWeight: '500',
     textAlign: 'center',
-    color: '#246BFD',
+    textAlignVertical: 'center',
+    color: BLUE_COLOR1,
   },
   topDocSecContent: {
     flexDirection: 'row',

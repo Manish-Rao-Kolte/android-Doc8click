@@ -19,8 +19,8 @@ interface TextInputVarientProps {
 const TextInputVarient = ({ icon, value, placeholder, errText, onChangeText, viewPassword, setViewPassword, viewIcon, hideIcon, type, keyboardType }: TextInputVarientProps) => {
 
     return (
-        <View style={[styles.container, { borderColor: errText ? "red" : '#9e9e9e', borderWidth: errText ? 1.2 : 1 }]}>
-            <View style={styles.inputContainer}>
+        <View style={styles.container}>
+            <View style={[styles.inputContainer, { borderColor: errText ? "red" : '#9e9e9e', borderWidth: errText ? 1.2 : 1 }]}>
                 {icon && <Image source={icon} style={styles.txtInputIcon} />}
                 <TextInput style={styles.txtInput} placeholder={placeholder} value={String(value)} secureTextEntry={type === "password" && !viewPassword} onChangeText={onChangeText} keyboardType={keyboardType} />
                 {(type === 'password' && value) &&
@@ -41,16 +41,18 @@ export default TextInputVarient
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
         width: '100%',
-        height: 55,
-        borderRadius: 10,
-        justifyContent: 'center',
-        paddingHorizontal: 5,
     },
     inputContainer: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        height: 55,
+        borderRadius: 10,
+        justifyContent: 'center',
+        paddingHorizontal: 5,
     },
     txtInputIcon: {
         width: 24,
@@ -63,7 +65,6 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     errTxt: {
-        maxWidth: '95%',
         color: 'red',
         fontSize: 14,
         marginTop: 5,
