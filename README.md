@@ -1,79 +1,97 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Doc8Click
 
-# Getting Started
+## Overview
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+**Doc8Click** is a mobile application that allows users to book doctor appointments from the comfort of their homes and receive consultations via video calls. The app aims to provide a convenient and efficient way for patients to connect with healthcare providers.
 
-## Step 1: Start the Metro Server
+## Features
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- User registration and authentication
+- Search and browse doctors by specialty
+- Book appointments
+- User profile management
+- Appointment history
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Tech Stack
 
-```bash
-# using npm
-npm start
+- **Frontend**: React Native
+- **Backend**: Node.js, Express
+- **Database**: MongoDB
+- **State Management**: Redux
+- **API**: RESTful API
 
-# OR using Yarn
-yarn start
-```
+## Installation
 
-## Step 2: Start your Application
+1. Clone the repository:
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+   ```bash
+   git clone https://github.com/Manish-Rao-Kolte/android-Doc8click
+   cd android-Doc8click
 
-### For Android
+   ```
 
-```bash
-# using npm
-npm run android
+2. Install dependencies:
 
-# OR using Yarn
-yarn android
-```
+   ```bash
+   npm install
 
-### For iOS
+   ```
 
-```bash
-# using npm
-npm run ios
+3. For iOS, navigate to the ios directory and install CocoaPods:
 
-# OR using Yarn
-yarn ios
-```
+   ```bash
+   cd ios
+   pod install
+   cd ..
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+   ```
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+4. Run the application:
 
-## Step 3: Modifying your App
+   - For Android:
 
-Now that you have successfully run the app, let's modify it.
+     ```bash
+     npx react-native run-android
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+     ```
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+   - For iOS:
 
-## Congratulations! :tada:
+     ```bash
+     npx react-native run-ios
 
-You've successfully run and modified your React Native App. :partying_face:
+     ```
 
-### Now what?
+## Usage
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+1. Create an account or log in to your existing account.
+2. Browse available doctors by specialty.
+3. Select a doctor and book an appointment.
 
-# Troubleshooting
+## Contributing
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+1. Fork the repository.
+2. Create your feature branch:
+   ```bash
+     git checkout -b feature/YourFeature
 
-# Learn More
+   ```
+3. Commit your changes:
 
-To learn more about React Native, take a look at the following resources:
+   ```bash
+     git commit -m "Add your message"
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+   ```
+
+4. Push to the branch:
+
+   ```bash
+     git push origin feature/YourFeature
+
+   ```
+
+5. Open a Pull Request.
+
+## Acknowledgments
+
+- React Native community for their support and resources.
