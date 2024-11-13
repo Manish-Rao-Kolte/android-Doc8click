@@ -16,6 +16,8 @@ import {RootScreenProps} from '../../types/navigation';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUser} from '../../redux/reducers/userSlice/userSlice';
 import {authSelector} from '../../redux/reducers/authSlice/authSlice';
+import {MAIN_BG_COLOR} from '../../utils/colors';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const imagePickerOptions = {
   maxWidth: 500,
@@ -131,28 +133,49 @@ const Profile = ({navigation}: RootScreenProps<'Profile'>) => {
           </View>
 
           {/* User Information Section */}
-          {isEditing ? (
-            <View
-              style={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'center',
-                gap: 20,
-              }}>
+          <ScrollView
+            style={styles.userInfoCard}
+            contentContainerStyle={{
+              justifyContent: 'space-between',
+            }}>
+            <Text style={styles.profileLabel}>Full Name:</Text>
+            {isEditing ? (
               <TextInputVarient
                 value={name}
                 onChangeText={setName}
                 placeholder="Name"
+                styleObj={{marginBottom: 10}}
               />
+            ) : (
+              <Text style={styles.profileText}>{`${userData?.firstName || ''} ${
+                userData?.lastName || ''
+              }`}</Text>
+            )}
+            <Text style={styles.profileLabel}>Username:</Text>
+            <Text style={styles.profileText}>{userData?.username}</Text>
+            <Text style={styles.profileLabel}>Email:</Text>
+            <Text style={styles.profileText}>{userData?.email}</Text>
+            <Text style={styles.profileLabel}>Address:</Text>
+            {isEditing ? (
               <TextInputVarient
                 value={address}
                 onChangeText={setAddress}
                 placeholder="Address"
+                styleObj={{marginBottom: 10}}
               />
+            ) : (
+              <Text style={styles.profileText}>{userData?.address}</Text>
+            )}
+            <Text style={styles.profileLabel}>Gender:</Text>
+            {isEditing ? (
               <GenderSelect
                 selectedGender={gender || userData?.gender}
                 onGenderSelect={(val: string) => setGender(val)}
               />
+            ) : (
+              <Text style={styles.profileText}>{userData?.gender}</Text>
+            )}
+            {isEditing ? (
               <View style={styles.buttonContainer}>
                 <Pressable style={styles.saveButton} onPress={updateProfile}>
                   <Text style={styles.saveButtonText}>Save</Text>
@@ -161,28 +184,14 @@ const Profile = ({navigation}: RootScreenProps<'Profile'>) => {
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </Pressable>
               </View>
-            </View>
-          ) : (
-            <View style={styles.userInfoCard}>
-              <Text style={styles.profileLabel}>Full Name:</Text>
-              <Text style={styles.profileText}>{`${userData?.firstName || ''} ${
-                userData?.lastName || ''
-              }`}</Text>
-              <Text style={styles.profileLabel}>Username:</Text>
-              <Text style={styles.profileText}>{userData?.username}</Text>
-              <Text style={styles.profileLabel}>Email:</Text>
-              <Text style={styles.profileText}>{userData?.email}</Text>
-              <Text style={styles.profileLabel}>Address:</Text>
-              <Text style={styles.profileText}>{userData?.address}</Text>
-              <Text style={styles.profileLabel}>Gender:</Text>
-              <Text style={styles.profileText}>{userData?.gender}</Text>
+            ) : (
               <Pressable
                 style={styles.editButton}
                 onPress={() => setIsEditing(true)}>
                 <Text style={styles.editButtonText}>Edit Profile</Text>
               </Pressable>
-            </View>
-          )}
+            )}
+          </ScrollView>
 
           {/* Image Picker Modal */}
           <Modal
@@ -202,14 +211,12 @@ export default Profile;
 const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: MAIN_BG_COLOR,
   },
   profileMainCont: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    padding: 15,
   },
   profileImgCont: {
     position: 'relative',
@@ -245,28 +252,29 @@ const styles = StyleSheet.create({
     tintColor: 'white',
   },
   userInfoCard: {
+    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    width: '100%',
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 4,
-    marginTop: 20,
+    gap: 10,
   },
   profileLabel: {
     fontSize: 14,
+    fontFamily: 'Nunito-Bold',
     color: '#888',
     marginBottom: 4,
-    fontWeight: '600',
   },
   profileText: {
     fontSize: 18,
+    fontFamily: 'Nunito-ExtraBold',
     color: '#333',
     marginBottom: 12,
-    fontWeight: 'bold',
   },
   input: {
     borderWidth: 1,
@@ -299,10 +307,13 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
   },
   buttonContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    marginBottom: 20,
   },
   saveButton: {
     backgroundColor: 'rgb(68,182,120)',
@@ -319,7 +330,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
   },
   cancelButton: {
     backgroundColor: '#f44336',
@@ -335,6 +346,6 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
   },
 });
