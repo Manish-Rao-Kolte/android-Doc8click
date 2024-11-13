@@ -17,6 +17,8 @@ import {
   MAIN_FONT_COLOR,
   MAIN_TINT_COLOR,
 } from '../../utils/colors';
+import {Header, SafeScreen} from '../../components/components';
+import {NavigationRouteTypes} from '../../types/navigation';
 
 const timeSlots = [
   '10:00 AM',
@@ -33,7 +35,7 @@ const timeSlots = [
   '9:00 PM',
 ];
 
-const BookAppointment = ({route}: {route: any}) => {
+const BookAppointment = ({navigation, route}: NavigationRouteTypes) => {
   const {doctor} = route.params;
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState(timeSlots[0]);
@@ -43,83 +45,90 @@ const BookAppointment = ({route}: {route: any}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Doctor's Info */}
-      <View style={styles.doctorCard}>
-        <Image
-          source={require('../../images/doctors-image/doctor1-icon.png')}
-          style={styles.doctorImage}
-        />
-        <View style={styles.doctorInfo}>
-          <Text style={styles.doctorName}>{doctor.name}</Text>
-          <Text style={styles.specialty}>{doctor.specialty}</Text>
-          <View style={styles.rating}>
-            <Text style={styles.ratingText}>
-              ⭐ {doctor.rating} (120 reviews)
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Image
-              source={require('../../images/doctors-image/hospital.png')}
-              style={styles.docCardImg}
-            />
-            <Text style={styles.details}>{doctor.hospital}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Image
-              source={require('../../images/doctors-image/dollar.png')}
-              style={styles.docCardImg}
-            />
-            <Text style={styles.details}>${doctor.consultationCharge}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Image
-              source={require('../../images/doctors-image/briefcase.png')}
-              style={styles.docCardImg}
-            />
-            <Text style={styles.details}>
-              {doctor.yearsOfPractice} years of practice
-            </Text>
+    <SafeScreen>
+      <Header
+        isHome={false}
+        title={'Book Appointment'}
+        navigation={navigation}
+      />
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Doctor's Info */}
+        <View style={styles.doctorCard}>
+          <Image
+            source={require('../../images/doctors-image/doctor1-icon.png')}
+            style={styles.doctorImage}
+          />
+          <View style={styles.doctorInfo}>
+            <Text style={styles.doctorName}>{doctor.name}</Text>
+            <Text style={styles.specialty}>{doctor.specialty}</Text>
+            <View style={styles.rating}>
+              <Text style={styles.ratingText}>
+                ⭐ {doctor.rating} (120 reviews)
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Image
+                source={require('../../images/doctors-image/hospital.png')}
+                style={styles.docCardImg}
+              />
+              <Text style={styles.details}>{doctor.hospital}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Image
+                source={require('../../images/doctors-image/dollar.png')}
+                style={styles.docCardImg}
+              />
+              <Text style={styles.details}>${doctor.consultationCharge}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Image
+                source={require('../../images/doctors-image/briefcase.png')}
+                style={styles.docCardImg}
+              />
+              <Text style={styles.details}>
+                {doctor.yearsOfPractice} years of practice
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      {/* Date Picker */}
-      <View style={styles.datePicker}>
-        <Text style={styles.sectionTitle}>Select Date</Text>
-        <DateTimePicker
-          mode="single"
-          date={selectedDate}
-          onChange={params => setSelectedDate(params.date as dayjs.Dayjs)}
-        />
-      </View>
+        {/* Date Picker */}
+        <View style={styles.datePicker}>
+          <Text style={styles.sectionTitle}>Select Date</Text>
+          <DateTimePicker
+            mode="single"
+            date={selectedDate}
+            onChange={params => setSelectedDate(params.date as dayjs.Dayjs)}
+          />
+        </View>
 
-      {/* Time Slots */}
-      <View style={styles.timeSlots}>
-        <Text style={styles.sectionTitle}>Select Time Slot</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {timeSlots.map((slot, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => setSelectedTime(slot)}
-              style={[
-                styles.timeSlot,
-                {
-                  backgroundColor:
-                    selectedTime === slot ? BLUE_COLOR1 : MAIN_TINT_COLOR,
-                },
-              ]}>
-              <Text style={styles.timeSlotText}>{slot}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+        {/* Time Slots */}
+        <View style={styles.timeSlots}>
+          <Text style={styles.sectionTitle}>Select Time Slot</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {timeSlots.map((slot, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedTime(slot)}
+                style={[
+                  styles.timeSlot,
+                  {
+                    backgroundColor:
+                      selectedTime === slot ? BLUE_COLOR1 : MAIN_TINT_COLOR,
+                  },
+                ]}>
+                <Text style={styles.timeSlotText}>{slot}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
-      {/* Book Now Button */}
-      <TouchableOpacity style={styles.bookButton} onPress={handleBookNow}>
-        <Text style={styles.bookButtonText}>Book Now</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Book Now Button */}
+        <TouchableOpacity style={styles.bookButton} onPress={handleBookNow}>
+          <Text style={styles.bookButtonText}>Book Now</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeScreen>
   );
 };
 

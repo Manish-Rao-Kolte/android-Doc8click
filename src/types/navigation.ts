@@ -34,4 +34,10 @@ export type HeaderProps = {
   isHome: boolean;
   title: string;
   navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
+  cleanup?: () => void;
+};
+
+export type NavigationRouteTypes = {
+  navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
+  route: any;
 };

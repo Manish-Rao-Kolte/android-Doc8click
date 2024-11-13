@@ -31,7 +31,7 @@ const DocCard = ({doc, navigation}: DocCardProps) => {
       <TouchableOpacity
         style={styles.docCardBookBtn}
         onPress={navigateToBookAppointment}>
-        <Text style={{color: '#fff', fontSize: 20}}>Book</Text>
+        <Text style={styles.docCardBookBtnTxt}>Book</Text>
       </TouchableOpacity>
     </View>
   );
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     width: '45%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderWidth: 0.6,
     borderColor: BLUE_COLOR1,
     borderRadius: 20,
     paddingVertical: 10,
@@ -58,26 +58,32 @@ const styles = StyleSheet.create({
     objectFit: 'contain',
   },
   docCardName: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 16.5,
+    fontFamily: 'Nunito-Black',
   },
   docCardSpl: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 15.5,
+    fontFamily: 'Nunito-Bold',
   },
   docCardRat: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 13.7,
+    fontFamily: 'Nunito-SemiBold',
   },
   docCardBookBtn: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: BLUE_COLOR1,
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: BLUE_COLOR1,
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,
     padding: 5,
+  },
+  docCardBookBtnTxt: {
+    color: '#fff',
+    fontSize: 17,
+    fontFamily: 'Nunito-ExtraBold',
+    textTransform: 'uppercase',
   },
 });

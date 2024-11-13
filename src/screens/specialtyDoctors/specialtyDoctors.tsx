@@ -1,8 +1,6 @@
 import React, {FC, useLayoutEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
-import DocCard from '../../components/DocCard';
-import {RootNavParamList, RootScreenProps} from '../../types/navigation';
+import {NavigationRouteTypes} from '../../types/navigation';
 import {
   doctorSelector,
   getDoctors,
@@ -12,15 +10,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {doctor} from '../../types/schemas/doctor/doctor';
 import {ScrollView} from 'react-native-gesture-handler';
 import {MAIN_BG_COLOR} from '../../utils/colors';
+import {
+  Header,
+  ShimmerLoader,
+  DocCard,
+  SafeScreen,
+} from '../../components/components';
 
-interface SpecialtyDoctorsProps {
-  navigation: RootScreenProps<keyof RootNavParamList>['navigation'];
-  route: any;
-}
-
-const SpecialtyDoctors: FC<SpecialtyDoctorsProps> = ({navigation, route}) => {
+const SpecialtyDoctors: FC<NavigationRouteTypes> = ({navigation, route}) => {
   const {specialty} = route.params;
-  const {doctors} = useSelector(doctorSelector);
+  const {doctors, isLoading} = useSelector(doctorSelector);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -31,9 +30,14 @@ const SpecialtyDoctors: FC<SpecialtyDoctorsProps> = ({navigation, route}) => {
     };
   }, []);
 
+  if (isLoading) {
+    return <ShimmerLoader number={20} />;
+  }
+
   return (
     <SafeScreen>
-      <ScrollView style={styles.container}>
+      <Header isHome={false} title={'All Doctors'} navigation={navigation} />
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.topDocSecContent}>
           {doctors?.length > 0 &&
             doctors.map((doc: doctor) => (
@@ -49,12 +53,9 @@ export default SpecialtyDoctors;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    padding: 15,
     backgroundColor: MAIN_BG_COLOR,
-  },
-  listContainer: {
-    paddingBottom: 20,
-    paddingHorizontal: 5,
   },
   topDocSecContent: {
     flexDirection: 'row',

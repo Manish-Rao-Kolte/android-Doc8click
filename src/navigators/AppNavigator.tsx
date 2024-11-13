@@ -4,20 +4,28 @@ import Splash from '../screens/Splash/Splash';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootNavParamList} from '../types/navigation';
 import AuthNavigator from './AuthNavigator/AuthNavigator';
-import {useSelector} from 'react-redux';
-import {authSelector} from '../redux/reducers/authSlice/authSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  authSelector,
+  resetLoading,
+} from '../redux/reducers/authSlice/authSlice';
 import MyTabsNavigator from './MyTabsNavigator';
 import BookAppointment from '../screens/BookAppointment/BookAppointment';
-import {THEME_COLOR} from '../utils/colors';
 import SpecialtyDoctors from '../screens/SpecialtyDoctors/SpecialtyDoctors';
 
 const Stack = createStackNavigator<RootNavParamList>();
 
 const AppNavigator = () => {
-  const {userData} = useSelector(authSelector);
+  const {userData, isLoading} = useSelector(authSelector);
   const [splash, setSplash] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    if (splash) {
+      if (isLoading) {
+        dispatch(resetLoading());
+      }
+    }
     setTimeout(() => {
       setSplash(false);
     }, 2000);
@@ -30,25 +38,10 @@ const AppNavigator = () => {
         {userData ? (
           <Stack.Group>
             <Stack.Screen name="MyTabsNavigator" component={MyTabsNavigator} />
-            <Stack.Screen
-              name="BookAppointment"
-              component={BookAppointment}
-              options={{
-                headerShown: true,
-                title: 'Book Appointment',
-                headerTintColor: 'white',
-                headerStyle: {backgroundColor: THEME_COLOR},
-              }}
-            />
+            <Stack.Screen name="BookAppointment" component={BookAppointment} />
             <Stack.Screen
               name="SpecialtyDoctors"
               component={SpecialtyDoctors}
-              options={{
-                headerShown: true,
-                title: 'All Doctors',
-                headerTintColor: 'white',
-                headerStyle: {backgroundColor: THEME_COLOR},
-              }}
             />
           </Stack.Group>
         ) : (

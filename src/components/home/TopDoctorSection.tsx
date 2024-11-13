@@ -1,8 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useLayoutEffect, useRef, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import DocCard from '../DocCard';
-import {BLUE_COLOR1, MAIN_BG_COLOR, MAIN_FONT_COLOR} from '../../utils/colors';
+import {BLUE_COLOR1, BLUE_COLOR2, MAIN_BG_COLOR} from '../../utils/colors';
 import {
   doctorSelector,
   getDoctors,
@@ -11,6 +10,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {doctor} from '../../types/schemas/doctor/doctor';
 import {RootNavParamList, RootScreenProps} from '../../types/navigation';
+import {ShimmerLoader, DocCard} from '../components';
 
 interface TopDoctorSectionProps {
   doctorSpecialties: {specialty: string}[];
@@ -25,7 +25,7 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({
 }) => {
   const docSecRef = useRef<View>(null);
   const flatListRef = useRef<FlatList>(null);
-  const {specialty, doctors} = useSelector(doctorSelector);
+  const {specialty, doctors, isLoading} = useSelector(doctorSelector);
   const dispatch = useDispatch();
   const doctorsList = doctors;
 
@@ -77,9 +77,9 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({
         <Text style={styles.topDocSecHdrTxt} onPress={handleScrollToSection}>
           Top Doctors
         </Text>
-        {/* <TouchableOpacity>
+        <TouchableOpacity>
           <Text style={styles.topDocSecHdrLink}>See All</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       <FlatList
         ref={flatListRef}
@@ -96,7 +96,9 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({
                 styles.topDocSplListTxt,
                 item.specialty === specialty && {
                   backgroundColor: BLUE_COLOR1,
+                  borderColor: BLUE_COLOR2,
                   color: MAIN_BG_COLOR,
+                  opacity: 1,
                 },
               ]}>
               {item.specialty}
@@ -104,12 +106,18 @@ const TopDoctorSection: React.FC<TopDoctorSectionProps> = ({
           </TouchableOpacity>
         )}
       />
-      <View style={styles.topDocSecContent} ref={docSecRef}>
-        {doctorsList?.length > 0 &&
-          doctorsList
-            .slice(0, 6)
-            .map((doc: doctor) => <DocCard key={doc._id} doc={doc} navigation={navigation}/>)}
-      </View>
+      {isLoading ? (
+        <ShimmerLoader number={6} />
+      ) : (
+        <View style={styles.topDocSecContent} ref={docSecRef}>
+          {doctorsList?.length > 0 &&
+            doctorsList
+              .slice(0, 6)
+              .map((doc: doctor) => (
+                <DocCard key={doc._id} doc={doc} navigation={navigation} />
+              ))}
+        </View>
+      )}
     </View>
   );
 };
@@ -118,7 +126,7 @@ export default TopDoctorSection;
 
 const styles = StyleSheet.create({
   topDocSec: {
-    marginTop: 30,
+    flexGrow: 1,
     justifyContent: 'center',
     gap: 15,
   },
@@ -128,34 +136,37 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topDocSecHdrTxt: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: MAIN_FONT_COLOR,
+    fontSize: 20,
+    fontFamily: 'Nunito-ExtraBold',
+    fontWeight: '900',
+    color: '#2B2A2A',
   },
   topDocSecHdrLink: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: BLUE_COLOR1,
+    fontSize: 16.5,
+    fontWeight: '700',
+    fontFamily: 'Nunito-Medium',
+    color: '#2B70FD',
   },
   topDocSplListTxt: {
-    fontSize: 16,
+    fontSize: 14,
     maxWidth: 120,
     height: 35,
-    marginHorizontal: 1,
+    marginHorizontal: 1.2,
     paddingHorizontal: 6,
-    borderWidth: 2,
+    borderWidth: 1.3,
     borderColor: BLUE_COLOR1,
     borderRadius: 20,
-    fontWeight: '500',
+    fontFamily: 'Nunito-Bold',
+    fontWeight: '700',
     textAlign: 'center',
     textAlignVertical: 'center',
     color: BLUE_COLOR1,
+    opacity: 0.8,
   },
   topDocSecContent: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },

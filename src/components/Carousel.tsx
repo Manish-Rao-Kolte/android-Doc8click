@@ -1,27 +1,37 @@
-import { StyleSheet, View, Image } from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import React from 'react';
 import Carousel from 'react-native-reanimated-carousel';
 
 type CarouselComponentProps = {
   data: Array<any>;
+  width: number;
+  height: number;
+  autoPlay?: boolean;
+  mode?: any;
 };
 
-const CarouselComponent = ({ data }: CarouselComponentProps) => {
+const CarouselComponent = ({
+  data,
+  width,
+  height,
+  mode = 'parallax',
+  autoPlay = true,
+}: CarouselComponentProps) => {
   return (
     <View style={styles.caroouselCont}>
       <Carousel
         loop
-        width={420}
-        height={200}
-        autoPlay={true}
-        mode="parallax"
+        width={width}
+        height={height}
+        autoPlay={autoPlay}
+        mode={mode}
         modeConfig={{
           parallaxScrollingScale: 0.85,
-          parallaxScrollingOffset: 80,
+          parallaxScrollingOffset: 78,
         }}
         data={[...data]}
-        scrollAnimationDuration={2000}
-        renderItem={({ item, index }) => (
+        scrollAnimationDuration={2500}
+        renderItem={({item, index}) => (
           <View style={styles.carouselItem}>
             <Image style={styles.carouselImg} source={item} />
           </View>
@@ -36,7 +46,6 @@ export default CarouselComponent;
 const styles = StyleSheet.create({
   caroouselCont: {
     width: '100%',
-    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
   },

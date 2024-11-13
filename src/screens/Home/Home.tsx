@@ -1,14 +1,15 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import React, {useRef} from 'react';
-import Header from '../../components/Header';
-import HomeHeader from '../../components/HomeHeader';
-import Carousel from '../../components/Carousel';
-import SpecialitySection from '../../components/home/SpecialitySection';
-import TopDoctorSection from '../../components/home/TopDoctorSection';
-import {RootScreenProps} from '../../types/navigation';
-import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
+import React, {Suspense, useRef, lazy, useState} from 'react';
 import {MAIN_BG_COLOR} from '../../utils/colors';
-
+import {RootScreenProps} from '../../types/navigation';
+import {
+  HomeHeader,
+  Carousel,
+  SafeScreen,
+  SpecialitySection,
+  TopDoctorSection,
+  Header,
+} from '../../components/components';
 const carouselData = [
   require('../../images/carousel-image/carousel1.jpg'),
   require('../../images/carousel-image/carousel2.jpg'),
@@ -67,14 +68,30 @@ const doctorSpecialties = [
 
 const Home = ({navigation}: RootScreenProps<'Home'>) => {
   const scrollViewRef = useRef(null);
+  const [dimensions, setDimensions] = useState({
+    width: 400,
+    height: 200,
+  });
+  const handleDimensionsChange = (e: {
+    nativeEvent: {layout: {width: number; height: number}};
+  }) => {
+    setDimensions({
+      width: e.nativeEvent.layout.width,
+      height: e.nativeEvent.layout.height,
+    });
+  };
 
   return (
     <SafeScreen>
-      <View style={styles.homeContainer}>
-        <Header isHome={true} title={'Home'} navigation={navigation} />
+      <View style={styles.homeContainer} onLayout={handleDimensionsChange}>
+        <Header isHome={true} title="Home" navigation={navigation} />
         <ScrollView ref={scrollViewRef}>
           <HomeHeader />
-          <Carousel data={carouselData} />
+          <Carousel
+            data={carouselData}
+            width={dimensions.width}
+            height={(23 * dimensions.height) / 100}
+          />
           <View style={styles.homeMainCont}>
             <SpecialitySection
               doctorSpecialties={doctorSpecialties}
@@ -101,5 +118,6 @@ const styles = StyleSheet.create({
   },
   homeMainCont: {
     padding: 15,
+    gap: 10,
   },
 });

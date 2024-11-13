@@ -1,8 +1,16 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {RootNavParamList, RootScreenProps} from '../../types/navigation';
 import {useDispatch} from 'react-redux';
 import {setSpecialty} from '../../redux/reducers/doctorSlice/doctorSlice';
+import {FlatList} from 'react-native-gesture-handler';
 
 interface SpecialitySectionProps {
   doctorSpecialties: {specialty: string; image: any}[];
@@ -23,30 +31,18 @@ const SpecialitySection: React.FC<SpecialitySectionProps> = ({
     <View style={styles.specialitySec}>
       <View style={styles.specialitySecHdr}>
         <Text style={styles.specialitySecHdrTxt}>Doctor Speciality</Text>
-        {/* <TouchableOpacity>
+        <TouchableOpacity>
           <Text style={styles.specialitySecHdrLink}>See All</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
-      <View style={styles.specialitySecContent}>
-        {doctorSpecialties.map((item, index) => {
-          if (index === 7) {
-            return (
-              <View style={styles.specialitySecItem} key={index}>
-                <TouchableOpacity style={styles.specialitySecItemImgCont}>
-                  <Image
-                    style={styles.specialitySecItemImg}
-                    source={require('../../images/speciality-icon/more-icon.png')}
-                  />
-                </TouchableOpacity>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={styles.specialitySecItemTxt}>
-                  More
-                </Text>
-              </View>
-            );
-          } else if (index < 7) {
+      <FlatList
+        data={doctorSpecialties}
+        numColumns={4}
+        keyExtractor={item => item.specialty}
+        scrollEnabled={false}
+        contentContainerStyle={styles.specialitySecContent}
+        renderItem={({item, index}) => {
+          if (index < 7) {
             return (
               <View style={styles.specialitySecItem} key={index}>
                 <TouchableOpacity
@@ -65,9 +61,28 @@ const SpecialitySection: React.FC<SpecialitySectionProps> = ({
                 </Text>
               </View>
             );
+          } else if (index === 7) {
+            return (
+              <View style={styles.specialitySecItem} key={index}>
+                <TouchableOpacity style={styles.specialitySecItemImgCont}>
+                  <Image
+                    style={styles.specialitySecItemImg}
+                    source={require('../../images/speciality-icon/more-icon.png')}
+                  />
+                </TouchableOpacity>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={styles.specialitySecItemTxt}>
+                  More
+                </Text>
+              </View>
+            );
+          } else {
+            return null;
           }
-        })}
-      </View>
+        }}
+      />
     </View>
   );
 };
@@ -86,47 +101,44 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   specialitySecHdrTxt: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 20,
+    fontFamily: 'Nunito-ExtraBold',
+    fontWeight: '900',
     color: '#2B2A2A',
   },
   specialitySecHdrLink: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 16.5,
+    fontWeight: '700',
+    fontFamily: 'Nunito-Medium',
     color: '#2B70FD',
   },
   specialitySecContent: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    columnGap: 15,
-    rowGap: 10,
+    gap: 10,
   },
   specialitySecItem: {
-    width: 80,
-    height: 100,
-    justifyContent: 'space-between',
+    flex: 1,
+    marginHorizontal: 3,
     alignItems: 'center',
-    gap: 5,
+    gap: 6,
   },
   specialitySecItemImgCont: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: (Dimensions.get('window').width / 4) * 0.5,
+    height: (Dimensions.get('window').width / 4) * 0.5,
+    borderRadius: ((Dimensions.get('window').width / 4) * 0.5) / 2,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgb(239,244,255)',
   },
   specialitySecItemImg: {
-    width: 40,
-    height: 40,
+    width: (Dimensions.get('window').width / 4) * 0.35,
+    height: (Dimensions.get('window').width / 4) * 0.35,
     objectFit: 'contain',
     tintColor: '#4380FF',
   },
   specialitySecItemTxt: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 15,
+    fontFamily: 'Nunito-Bold',
+    fontWeight: '600',
     textAlign: 'center',
   },
 });

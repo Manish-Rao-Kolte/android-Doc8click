@@ -1,13 +1,25 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { HeaderProps } from '../types/navigation';
-import { useDispatch } from 'react-redux';
-import { removeUser } from '../redux/reducers/authSlice/authSlice';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {HeaderProps} from '../types/navigation';
+import {useDispatch} from 'react-redux';
+import {removeUser} from '../redux/reducers/authSlice/authSlice';
+import {MAIN_FONT_COLOR, MAIN_TINT_COLOR} from '../utils/colors';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MenuOptions from './molecules/MenuOptions/MenuOptions';
 
-const Header = ({ isHome, title, navigation }: HeaderProps) => {
+const Header = ({
+  isHome,
+  title,
+  navigation,
+  cleanup,
+  ...props
+}: HeaderProps) => {
   const dispatch = useDispatch();
+  const [notiCount, setNotiCount] = useState(0);
+  const [isMenuVisible, setMenuVisible] = useState(false);
   const handleBackPress = () => {
     navigation.goBack();
+    if (cleanup) cleanup();
   };
 
   const handleLogout = () => {
@@ -15,18 +27,53 @@ const Header = ({ isHome, title, navigation }: HeaderProps) => {
   };
   return (
     <View style={styles.headerContainer}>
-      {!isHome && (
-        <TouchableOpacity onPress={() => handleBackPress()}>
-          <Image
-            style={styles.headerImg}
-            source={require('../images/header-back.png')}
-          />
+      <MenuOptions
+        navigation={navigation}
+        isModalVisible={isMenuVisible}
+        setModalVisible={setMenuVisible}
+      />
+      <View style={styles.backTitleCont}>
+        {isHome ? (
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Icon
+              name="menu"
+              size={28}
+              color={MAIN_FONT_COLOR}
+              onPress={() => setMenuVisible(true)}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => handleBackPress()}>
+            <Icon name="keyboard-backspace" size={28} color={MAIN_FONT_COLOR} />
+          </TouchableOpacity>
+        )}
+        <Text style={styles.headerTxt}>{title}</Text>
+      </View>
+      {isHome ? (
+        <View style={styles.othersCont}>
+          <TouchableOpacity style={styles.notiContainer}>
+            <Icon
+              name="bell-outline"
+              size={26}
+              color={'#333'}
+              style={{opacity: 0.75}}
+            />
+            <Text style={styles.notiCount}>{notiCount}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon
+              name="heart-multiple-outline"
+              size={26}
+              color={'#333'}
+              style={{opacity: 0.75}}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity onPress={handleLogout}>
+          <Icon name="logout" size={25} color={MAIN_FONT_COLOR} />
         </TouchableOpacity>
       )}
-      <Text style={styles.headerTxt}>{title}</Text>
-      <TouchableOpacity onPress={handleLogout}>
-        <Text style={[styles.headerTxt, { borderColor: "#fff", borderRadius: 10, fontSize: 16, borderWidth: 1, paddingHorizontal: 8, paddingVertical: 2, elevation: 5 }]}>Logout</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -38,25 +85,53 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    gap: 10,
-    padding: 15,
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
     width: '100%',
-    height: 60,
-    backgroundColor: '#02386e',
+    backgroundColor: '#FFFFFF',
   },
-  headerImg: {
-    height: 23,
-    width: 23,
-    lineHeight: 24,
-    tintColor: '#fff',
+  backTitleCont: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    gap: 8,
   },
   headerTxt: {
-    color: '#fff',
-    fontSize: 19,
-    lineHeight: 24,
-    justifyContent: 'center',
+    color: MAIN_FONT_COLOR,
+    fontSize: 17.5,
+    textAlignVertical: 'center',
+    fontFamily: 'Nunito-Bold',
+  },
+  headerBtn: {
+    borderColor: MAIN_TINT_COLOR,
+    fontSize: 15,
+    borderRadius: 15,
+    borderWidth: 1.8,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+  othersCont: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
     alignItems: 'center',
-    letterSpacing: 1,
+  },
+  notiContainer: {
+    position: 'relative',
+  },
+  notiCount: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    fontSize: 11,
+    backgroundColor: 'rgba(255,69,69,0.88)',
+    color: '#fff',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
 });

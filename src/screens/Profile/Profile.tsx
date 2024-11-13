@@ -1,19 +1,21 @@
 import {StyleSheet, View, Image, Pressable, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import Header from '../../components/Header';
+import React, {useState} from 'react';
 import {
   Asset,
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import Modal from '../../components/Modal';
+import {
+  Header,
+  Modal,
+  TextInputVarient,
+  SafeScreen,
+  GenderSelect,
+} from '../../components/components';
 import {RootScreenProps} from '../../types/navigation';
-import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUser} from '../../redux/reducers/userSlice/userSlice';
 import {authSelector} from '../../redux/reducers/authSlice/authSlice';
-import GenderSelect from '../../components/molecules/GenderSelect/GenderSelect';
-import TextInputVarient from '../../components/atoms/TextInputVarient/TextInputVarient';
 
 const imagePickerOptions = {
   maxWidth: 500,
@@ -34,9 +36,13 @@ const Profile = ({navigation}: RootScreenProps<'Profile'>) => {
   const [address, setAddress] = useState(userData?.address || '');
   const [gender, setGender] = useState(userData?.gender || '');
 
-  // useEffect(() => {
-  //   console.log(userData);
-  // }, []);
+  const cleanup = () => {
+    setName(`${userData?.firstName || ''} ${userData?.lastName || ''}`);
+    setAddress(userData?.address || '');
+    setGender(userData?.gender || '');
+    setIsEditing(false);
+    setModalVisible(false);
+  };
 
   const handleCamera = () => {
     launchCamera(imagePickerOptions, response => {
@@ -97,7 +103,12 @@ const Profile = ({navigation}: RootScreenProps<'Profile'>) => {
   return (
     <SafeScreen>
       <View style={styles.profileContainer}>
-        <Header isHome={false} title={'Profile'} navigation={navigation} />
+        <Header
+          isHome={false}
+          title={'Profile'}
+          navigation={navigation}
+          cleanup={cleanup}
+        />
         <View style={styles.profileMainCont}>
           {/* Profile Image Section */}
           <View style={styles.profileImgCont}>

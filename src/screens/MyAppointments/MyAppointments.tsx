@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Header from '../../components/Header';
-import SafeScreen from '../../components/layout/SafeScreen/SafeScreen';
+import {AppointmentCard, Header, SafeScreen} from '../../components/components';
 import {RootScreenProps} from '../../types/navigation';
 import {
   BLUE_COLOR1,
@@ -19,35 +18,79 @@ import {
 const appointments = {
   upcoming: [
     {
-      id: '1',
+      id: 1,
       doctorName: 'Dr. John Doe',
-      date: '2024-09-28',
+      speciality: 'Dentist',
+      note: 'Please bring your prescription',
+      date: '2023-08-15',
       time: '10:00 AM',
       status: 'upcoming',
     },
     {
-      id: '2',
+      id: 2,
       doctorName: 'Dr. Jane Smith',
-      date: '2024-09-30',
+      speciality: 'Cardiologist',
+      note: 'Please bring your prescription',
+      date: '2023-08-16',
       time: '11:00 AM',
       status: 'upcoming',
     },
   ],
   completed: [
     {
-      id: '3',
-      doctorName: 'Dr. Lisa Ray',
-      date: '2024-08-15',
-      time: '2:00 PM',
+      id: 1,
+      doctorName: 'Dr. John Doe',
+      speciality: 'Dentist',
+      note: 'Please bring your prescription',
+      date: '2023-08-15',
+      time: '10:00 AM',
+      status: 'completed',
+    },
+    {
+      id: 2,
+      doctorName: 'Dr. Jane Smith',
+      speciality: 'Cardiologist',
+      note: 'Please bring your prescription',
+      date: '2023-08-16',
+      time: '11:00 AM',
+      status: 'completed',
+    },
+    {
+      id: 3,
+      doctorName: 'Dr. Michael Johnson',
+      speciality: 'Orthopedic Surgeon',
+      note: 'Please bring your prescription',
+      date: '2023-08-17',
+      time: '12:00 PM',
       status: 'completed',
     },
   ],
   cancelled: [
     {
-      id: '4',
-      doctorName: 'Dr. Aaron Finch',
-      date: '2024-09-05',
-      time: '1:00 PM',
+      id: 1,
+      doctorName: 'Dr. John Doe',
+      speciality: 'Dentist',
+      note: 'Please bring your prescription',
+      date: '2023-08-15',
+      time: '10:00 AM',
+      status: 'cancelled',
+    },
+    {
+      id: 2,
+      doctorName: 'Dr. Jane Smith',
+      speciality: 'Cardiologist',
+      note: 'Please bring your prescription',
+      date: '2023-08-16',
+      time: '11:00 AM',
+      status: 'cancelled',
+    },
+    {
+      id: 3,
+      doctorName: 'Dr. Michael Johnson',
+      speciality: 'Orthopedic Surgeon',
+      note: 'Please bring your prescription',
+      date: '2023-08-17',
+      time: '12:00 PM',
       status: 'cancelled',
     },
   ],
@@ -55,17 +98,6 @@ const appointments = {
 
 const MyAppointments = ({navigation}: RootScreenProps<'Appointments'>) => {
   const [activeTab, setActiveTab] = useState('upcoming');
-
-  const renderAppointment = (item: any) => (
-    <View key={item.id} style={styles.appointmentCard}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.doctorName}>{item.doctorName}</Text>
-        <Text style={styles.appointmentDetails}>
-          {item.date} | {item.time}
-        </Text>
-      </View>
-    </View>
-  );
 
   const getAppointments = () => {
     switch (activeTab) {
@@ -133,7 +165,14 @@ const MyAppointments = ({navigation}: RootScreenProps<'Appointments'>) => {
 
         {/* Appointment List */}
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {getAppointments().map(renderAppointment)}
+          {getAppointments().map((item, index) => {
+            return (
+              <AppointmentCard
+                item={item}
+                key={`${item.date}${item.time}${item.status}`}
+              />
+            );
+          })}
         </ScrollView>
       </View>
     </SafeScreen>
@@ -174,31 +213,5 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: MAIN_BG_COLOR,
     fontWeight: 'bold',
-  },
-  appointmentCard: {
-    backgroundColor: MAIN_BG_COLOR,
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  doctorName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: BLUE_COLOR1,
-  },
-  appointmentDetails: {
-    fontSize: 14,
-    color: MAIN_FONT_COLOR,
   },
 });

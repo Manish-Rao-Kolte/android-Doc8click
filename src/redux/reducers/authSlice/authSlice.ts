@@ -92,6 +92,9 @@ const authSlice = createSlice({
     resetError: state => {
       state.isError = '';
     },
+    resetLoading: state => {
+      state.isLoading = false;
+    },
   },
   extraReducers: builder => {
     builder
@@ -140,6 +143,7 @@ const authSlice = createSlice({
   },
 });
 
-export const {setUser, removeUser, resetError} = authSlice.actions;
+export const {setUser, removeUser, resetError, resetLoading} =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;
 export const authSelector = (state: any) => state.auth;

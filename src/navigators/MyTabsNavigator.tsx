@@ -5,8 +5,6 @@ import {RootNavParamList, TabBarIconProps} from '../types/navigation';
 import Home from '../screens/Home/Home';
 import MyAppointments from '../screens/MyAppointments/MyAppointments';
 import Profile from '../screens/Profile/Profile';
-import PdfViewer from '../screens/PdfViewer/PdfViewer';
-import MovieHome from '../screens/MovieHome/MovieHome';
 
 const Tab = createBottomTabNavigator<RootNavParamList>();
 

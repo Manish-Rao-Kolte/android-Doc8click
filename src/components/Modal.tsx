@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, Alert, Pressable } from 'react-native';
+import {StyleSheet, Text, View, Modal, Alert, Pressable} from 'react-native';
 import React from 'react';
 
 type CustomModalProps = {
