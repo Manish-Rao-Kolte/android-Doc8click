@@ -163,12 +163,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   doctorName: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontFamily: 'Nunito-ExtraBold',
     color: MAIN_FONT_COLOR,
   },
   specialty: {
-    fontSize: 18,
+    fontSize: 17,
+    fontFamily: 'Nunito-Bold',
     color: '#007bff',
     marginVertical: 5,
   },
@@ -178,11 +179,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   ratingText: {
-    fontSize: 16,
+    fontSize: 14.5,
+    fontFamily: 'Nunito-SemiBold',
     color: '#888',
   },
   details: {
-    fontSize: 16,
+    fontSize: 14.5,
+    fontFamily: 'Nunito-Medium',
     color: '#555',
     marginVertical: 2,
   },
@@ -194,11 +197,11 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   datePicker: {
-    marginBottom: 6,
+    // marginBottom: 6,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 18.5,
+    fontFamily: 'Nunito-ExtraBold',
     color: '#333',
     marginBottom: 10,
   },
@@ -222,7 +225,7 @@ const styles = StyleSheet.create({
   },
   timeSlotText: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-Bold',
   },
   bookButton: {
     backgroundColor: '#28a745',
@@ -234,7 +237,7 @@ const styles = StyleSheet.create({
   bookButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito-ExtraBold',
   },
   detailRow: {
     flexDirection: 'row',

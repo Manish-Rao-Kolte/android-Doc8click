@@ -259,7 +259,7 @@ const Login = ({navigation}: RootScreenProps<'Login'>) => {
             style={[styles.loginHeader, {letterSpacing: 1.2, fontSize: 30}]}>
             Welcome back
           </Text>
-          <Text style={[styles.loginHeader, {marginTop: 10}]}>
+          <Text style={[styles.loginHeader, {marginTop: 6}]}>
             to <Text style={{color: THEME_COLOR}}> Doc8click</Text>
           </Text>
         </View>
@@ -293,15 +293,26 @@ const Login = ({navigation}: RootScreenProps<'Login'>) => {
         {/* .. */}
 
         <View style={{display: 'flex', alignItems: 'center'}}>
-          <Text style={{fontSize: 14}}>OR</Text>
+          <Text style={{fontSize: 14, fontFamily: 'Poppins-Regular'}}>OR</Text>
           <Text
             onPress={() => !isLoading && handleOtpPasswordToggle()}
-            style={{fontSize: 16, marginTop: 8, color: BLUE_COLOR1}}>
+            style={{
+              fontSize: 16,
+              fontFamily: 'Poppins-Regular',
+              marginTop: 8,
+              color: BLUE_COLOR1,
+            }}>
             {loginWithOtp ? 'Login with Email and Password' : 'Login with OTP'}
           </Text>
         </View>
         <View style={{display: 'flex', alignItems: 'center'}}>
-          <Text style={{fontSize: 16, marginTop: 0, color: MAIN_FONT_COLOR}}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: 'Poppins-Regular',
+              marginTop: 0,
+              color: MAIN_FONT_COLOR,
+            }}>
             Don't have an account?{' '}
             <Text
               style={{
@@ -323,7 +334,6 @@ const Login = ({navigation}: RootScreenProps<'Login'>) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  // styles go here
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -337,8 +347,8 @@ const styles = StyleSheet.create({
     height: 150,
   },
   loginHeader: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 27,
+    fontFamily: 'Nunito-ExtraBold',
     color: MAIN_FONT_COLOR,
   },
   loginInputContainer: {
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
   lableText: {
     fontSize: 16,
     marginTop: 10,
-    fontWeight: '600',
+    fontFamily: 'Nunito-Regular',
   },
   loginInput: {
     width: '100%',

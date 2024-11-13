@@ -106,11 +106,13 @@ const styles = StyleSheet.create({
   },
   txtInput: {
     flex: 1,
-    fontSize: 17,
+    fontSize: 16.5,
+    fontFamily: 'Nunito-Medium',
   },
   errTxt: {
     color: 'red',
     fontSize: 14,
+    fontFamily: 'Nunito-Medium',
     marginTop: 5,
     marginLeft: 10,
   },
