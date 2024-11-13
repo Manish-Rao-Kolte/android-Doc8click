@@ -31,6 +31,7 @@ const Header = ({
         navigation={navigation}
         isModalVisible={isMenuVisible}
         setModalVisible={setMenuVisible}
+        handleLogout={handleLogout}
       />
       <View style={styles.backTitleCont}>
         {isHome ? (

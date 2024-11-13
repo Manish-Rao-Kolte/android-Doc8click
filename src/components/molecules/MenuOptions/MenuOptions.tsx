@@ -19,22 +19,32 @@ const menuItems = [
     name: 'Profile',
     icon: 'account-circle-outline',
   },
+  {
+    name: 'Logout',
+    icon: 'logout',
+  },
 ];
 
 const MenuOptions = ({
   isModalVisible,
   setModalVisible,
   navigation,
+  handleLogout,
 }: {
   isModalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   navigation: any;
+  handleLogout: () => void;
 }) => {
   const {userData} = useSelector(authSelector);
 
   const handleNavigation = (e: any, item: {name: string; icon: string}) => {
     e.stopPropagation();
     setModalVisible(false);
+    if (item.name === 'Logout') {
+      handleLogout();
+      return;
+    }
     navigation.navigate(item.name);
   };
 
@@ -55,9 +65,9 @@ const MenuOptions = ({
           </TouchableOpacity>
           <View style={styles.menuUserInfo}>
             <Text style={styles.menuUserName}>
-              {userData.firstName + ' ' + userData.lastName}
+              {`${userData?.firstName} ${userData?.lastName}`}
             </Text>
-            <Text style={styles.menuUserEmail}>{userData.email}</Text>
+            <Text style={styles.menuUserEmail}>{userData?.email}</Text>
           </View>
           <View style={styles.menuItemContainer}>
             {menuItems.map((item, index) => (
